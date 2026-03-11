@@ -35,5 +35,11 @@ class SimpleAccountingExtension extends Extension implements PrependExtensionInt
                 ],
             ],
         ]);
+
+        $container->prependExtensionConfig('doctrine_migrations', [
+            'migrations_paths' => [
+                'SimpleAccountingBundle\Migrations' => '@SimpleAccountingBundle/Migrations',
+            ],
+        ]);
     }
 }
