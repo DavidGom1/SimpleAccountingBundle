@@ -24,13 +24,33 @@ final class Version20260110121252 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE kimai2_partial_billing_entry (id INT AUTO_INCREMENT NOT NULL, project_id INT NOT NULL, amount DOUBLE PRECISION NOT NULL, created_at DATETIME NOT NULL, comment LONGTEXT DEFAULT NULL, INDEX IDX_BFB24132166D1F9C (project_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE kimai2_partial_billing_entry ADD CONSTRAINT FK_BFB24132166D1F9C FOREIGN KEY (project_id) REFERENCES kimai2_projects (id) ON DELETE CASCADE');
+        // there was a namespace error in the migration setup, that's why we have the same code in two files
+        if ($schema->hasTable('kimai2_partial_billing_entry')) {
+            $this->preventEmptyMigrationWarning();
+            return;
+        }
+
+        $table = $schema->createTable('kimai2_partial_billing_entry');
+        $table->addColumn('id', 'integer', ['autoincrement' => true, 'notnull' => true]);
+        $table->addColumn('project_id', 'integer', ['notnull' => true]);
+        $table->addColumn('amount', 'float', ['notnull' => true]);
+        $table->addColumn('created_at', 'datetime', ['notnull' => true]);
+        $table->addColumn('comment', 'text', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['project_id'], 'IDX_partial_billing_project');
+        $table->addForeignKeyConstraint(
+            'kimai2_projects',
+            ['project_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'FK_partial_billing_project'
+        );
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE kimai2_partial_billing_entry DROP FOREIGN KEY FK_BFB24132166D1F9C');
-        $this->addSql('DROP TABLE kimai2_partial_billing_entry');
+        if ($schema->hasTable('kimai2_partial_billing_entry')) {
+            $schema->dropTable('kimai2_partial_billing_entry');
+        }
     }
 }
