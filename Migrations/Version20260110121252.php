@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace KimaiPlugin\SimpleAccountingBundle\Migrations;
+namespace SimpleAccountingBundle\Migrations;
 
 use App\Doctrine\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
