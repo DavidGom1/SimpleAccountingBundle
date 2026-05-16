@@ -10,5 +10,5 @@
 table_storage:
   table_name: 'bundle_migration_simple_accounting'
 migrations_paths:
-  KimaiPlugin\SimpleAccountingBundle\Migrations: 'var/plugins/SimpleAccountingBundle/Migrations'
+  'SimpleAccountingBundle\Migrations': 'var/plugins/SimpleAccountingBundle/Migrations'
 custom_template: 'migrations/MigrationTemplate.txt'
